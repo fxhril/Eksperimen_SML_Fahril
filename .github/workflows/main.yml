@@ -1,0 +1,41 @@
+name: Automasi Preprocessing Data (Advanced)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  preprocessing-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Mengambil kode dari repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Menyiapkan Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      # 3. Menginstall Library yang dibutuhkan
+      - name: Install Dependencies
+        run: 
+          python -m pip install --upgrade pip
+          pip install pandas scikit-learn
+
+      # 4. Menjalankan Script Otomatis
+      - name: Run Preprocessing Script
+        run: 
+          cd preprocessing
+          python automate_fahril.py
+
+      # 5. Menyimpan Hasil Output sebagai Bukti (Artifact)
+      - name: Upload Clean Data
+        uses: actions/upload-artifact@v4
+        with:
+          name: heart-clean-dataset
+          path: preprocessing/data_clean/heart_clean.csv
